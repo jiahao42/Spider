@@ -18,8 +18,8 @@ class Spider:
 		self.special_code = ""
 		self.view_state = ""
 		self.check_code = ""
-		self.id = ""
-		self.password = ""
+		self.id = "" # add your username here
+		self.password = ""	# add your password here
 		self.cookies = self.r.cookies
 		self.login_url = ""
 		self.query_grade_url = "" 
@@ -61,9 +61,9 @@ class Spider:
 		'''
 		__VIEWSTATE=dDwyODE2NTM0OTg7Oz6tXdT5t0TCnP1YpTgCTDuuv60uog%3D%3D
 		&
-		txtUserName=2014010919
+		txtUserName=username
 		&
-		TextBox2=caijiahao5246
+		TextBox2=password
 		&
 		txtSecretCode=cr7b
 		&
