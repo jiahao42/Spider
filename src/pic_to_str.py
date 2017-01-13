@@ -10,4 +10,4 @@ image = Image.open('data.gif')
 
 vcode = pytesseract.image_to_string(image)
 
-print (vcode)
+print vcode

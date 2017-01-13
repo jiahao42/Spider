@@ -58,28 +58,7 @@ class Spider:
 		self.check_code = raw_input("please input the check code: ")
 
 	def send_request(self):
-		'''
-		example:
-		__VIEWSTATE=dDwyODE2NTM0OTg7Oz6tXdT5t0TCnP1YpTgCTDuuv60uog%3D%3D
-		&
-		txtUserName=username
-		&
-		TextBox2=password
-		&
-		txtSecretCode=cr7b
-		&
-		RadioButtonList1=%D1%A7%C9%FA   decode = "学生"
-		&
-		Button1=
-		&
-		lbLanguage=
-		&
-		hidPdrs=
-		&
-		hidsc=
-		'''
 		# example http://jwgl.bistu.edu.cn/(d5njjm552sqn0j45ijyef3jn)/default2.aspx
-		# login_url = self.base_url + self.special_code + "/xs_main.aspx?xh=" + self.id
 		self.login_url = self.base_url + self.special_code + "/default2.aspx"
 		payload = {"__VIEWSTATE": self.view_state,
 				   "txtUserName": self.id,
@@ -100,9 +79,9 @@ class Spider:
 			"Referer": self.login_url,
 			"Connection": "keep-alive",
 			"Accept-Language": "en-US,en;q=0,8",
-			"Accept-Encoding": "gzip, deflate"
-			}
-		r = self.session.post(self.login_url, data=payload, headers=headers)
+			"Accept-Encoding": "gzip, deflate",}
+		# r = self.session.post(self.login_url, data=payload, headers=headers)
+		r = self.session.post(self.login_url, data = payload, headers = headers)
 		print r.content.decode('gb2312')
 		print "[Sending Headers]: " + str(headers)
 		print "[StatusCode]: " + str(r.status_code)
