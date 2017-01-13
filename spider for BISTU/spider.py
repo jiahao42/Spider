@@ -3,10 +3,9 @@
 
 import requests
 import re
+import os
 from PIL import Image
 from io import StringIO
-# from pytesseract import image_to_string
-import pytesseract
 from urllib import urlencode
 from urllib import quote
 
@@ -18,8 +17,8 @@ class Spider:
 		self.special_code = ""
 		self.view_state = ""
 		self.check_code = ""
-		self.id = "" # add your username here
-		self.password = ""	# add your password here
+		self.id = "2014010919" # add your username here
+		self.password = "caijiahao5246"	# add your password here
 		self.cookies = self.r.cookies
 		self.login_url = ""
 		self.query_grade_url = "" 
@@ -53,12 +52,14 @@ class Spider:
 			f.write(if_match.group(1).strip())
 		f.close()
 		image = Image.open("data.gif")
-		self.check_code = pytesseract.image_to_string(image)
-		print "CheckCode: " + self.check_code
+		os.system("eog data.gif")
+		# self.check_code = pytesseract.image_to_string(image)
+		# print "CheckCode: " + self.check_code
 		self.check_code = raw_input("please input the check code: ")
 
 	def send_request(self):
 		'''
+		example:
 		__VIEWSTATE=dDwyODE2NTM0OTg7Oz6tXdT5t0TCnP1YpTgCTDuuv60uog%3D%3D
 		&
 		txtUserName=username
@@ -80,7 +81,6 @@ class Spider:
 		# example http://jwgl.bistu.edu.cn/(d5njjm552sqn0j45ijyef3jn)/default2.aspx
 		# login_url = self.base_url + self.special_code + "/xs_main.aspx?xh=" + self.id
 		self.login_url = self.base_url + self.special_code + "/default2.aspx"
-		print "LoginUrl: " + self.login_url
 		payload = {"__VIEWSTATE": self.view_state,
 				   "txtUserName": self.id,
 				   "TextBox2": self.password,
@@ -90,28 +90,23 @@ class Spider:
 				   "lbLanguage": "",
 				   "hidPdrs": "",
 				   "hidsc": "",}
-		string = "学生"
-		data = ""
-		data += "__VIEWSTATE=" + quote(self.view_state)
-		data += "&txtUserName=" + self.id
-		data += "&TextBox2=" + self.password
-		data += "&txtSecretCode=" + self.check_code
-		data += "&RadioButtonList1=" + '%D1%A7%C9%FA'
-		data += "&Button1=&lbLanguage=&hidPdrs=&hidsc="
 		headers = {
-			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36",
+			"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36",
 			"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
 			"Content-Type": "application/x-www-form-urlencoded",
-			"Host":"jwgl.bistu.edu.cn",
-			"Origin":"http://jwgl.bistu.edu.cn",
-			"Upgrade-Insecure-Requests":"1"}
-		# r = requests.post(self.login_url, data=data, headers=self.headers)
-		# print r.content.decode('gb2312')
+			"Host": "jwgl.bistu.edu.cn",
+			"Origin": "http://jwgl.bistu.edu.cn",
+			"Upgrade-Insecure-Requests": "1",
+			"Referer": self.login_url,
+			"Connection": "keep-alive",
+			"Accept-Language": "en-US,en;q=0,8",
+			"Accept-Encoding": "gzip, deflate"
+			}
 		r = self.session.post(self.login_url, data=payload, headers=headers)
 		print r.content.decode('gb2312')
-		print "StatusCode: " + str(r.status_code)
-		print "Cookie: " + str(requests.utils.dict_from_cookiejar(r.cookies))
-		print "Headers: " + str(r.headers)
+		print "[Sending Headers]: " + str(headers)
+		print "[StatusCode]: " + str(r.status_code)
+		print "[Receiving Headers]: " + str(r.headers)
 		self.cookies = r.cookies # 提取cookies
 		# example <span id="xhxm">蔡嘉豪同学</span></em>
 		if_match = re.search('(<span id=\"xhxm\">)(.*)' + u'同学',r.content.decode('gb2312'))
@@ -132,11 +127,15 @@ class Spider:
 	
 	def test(self):
 		pass
+	def getinfo(self):
+		self.id = raw_input("please input your username: ")
+		self.password = raw_input("please input your password: ")
 
 if __name__ == '__main__':
 	instance = Spider()
 	instance.get_url()
 	instance.get_pic()
+	#instance.getinfo()
 	instance.send_request()
-	instance.query_grade()
-	instance.test()
+	#instance.query_grade()
+	#instance.test()
