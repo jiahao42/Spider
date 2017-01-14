@@ -1,13 +1,7 @@
 # coding=utf-8
-
-
 from django.shortcuts import render
 import hashlib
-import time
-from django.http import JsonResponse
 from django.http import HttpResponse
-import xml.dom.minidom
-from xml.etree.ElementTree import Element, SubElement, tostring
 from wechat_sdk import WechatConf
 # Create your views here.
 conf = WechatConf(
@@ -19,34 +13,6 @@ conf = WechatConf(
 )
 from wechat_sdk import WechatBasic
 wechat = WechatBasic(conf=conf)
-
-def generate_text_reply(request):
-	user = ''
-	createtime = ''
-	content = ''
-	
-	# parse
-	DOMTree = xml.dom.minidom.parseString(request.body)
-	collection = DOMTree.documentElement
-	node = collection.getElementsByTagName('FromUserName')[0]
-	user = node.childNodes[0].data
-	node = collection.getElementsByTagName('CreateTime')[0]
-	createtime = node.childNodes[0].data
-	node = collection.getElementsByTagName('Content')[0]
-	content = node.childNodes[0].data
-	
-	#generate
-	replytext = '''<xml>
-	<ToUserName><![CDATA[%s]]></ToUserName>
-	<FromUserName><![CDATA[%s]]></FromUserName>
-	<CreateTime>%s</CreateTime>
-	<MsgType><![CDATA[%s]]></MsgType>
-	<Content><![CDATA[%s]]></Content>
-	</xml>'''
-	result = replytext % (user, 'Caterpillarous', str(int(time.time())), 'text', content)
-	
-	return result
-
 
 def auth(request):
 	if request.method == 'GET':
@@ -70,7 +36,6 @@ def auth(request):
 			return HttpResponse(echostr)
 	elif request.method == 'POST':
 		return HttpResponse(process_msg(request))
-		#return HttpResponse(generate_text_reply(request), content_type='application/xml; charset=utf-8')
 	
 
 def process_msg(request):
