@@ -28,16 +28,18 @@ class Spider:
 	def get_url(self):
 		# example http://jwgl.bistu.edu.cn/(d5njjm552sqn0j45ijyef3jn)/default2.aspx
 		if_match = re.search(r'((.*)/)(.*)(/(.*))', self.r.url)
-		print self.r.url
+		self.cookies = self.r.cookies
+		for cookie in self.cookies:
+			print "[Cookies]: " + str(cookie)
 		if if_match:
-			print "specialCode: " + if_match.group(3)
+			# print "specialCode: " + if_match.group(3)
 			self.special_code = if_match.group(3)
 		# example <input type="hidden" name="__VIEWSTATE" value="dDwyODE2NTM0OTg7Oz4mM+1DtiCTrt9yiTmdm7ZDjXbNFw==" />
 		if_match = re.search(r'((.*)VIEWSTATE" value=")(.*)(" />)', self.r.text)
 		if if_match:
-			print "ViewState: " + if_match.group(3)
+			# print "ViewState: " + if_match.group(3)
 			self.view_state = if_match.group(3)
-			print quote(self.view_state)
+			# print quote(self.view_state)
 
 	def get_pic(self):
 		pic_url = self.base_url + self.special_code + "/CheckCode.aspx"
@@ -83,26 +85,38 @@ class Spider:
 		# r = self.session.post(self.login_url, data=payload, headers=headers)
 		r = self.session.post(self.login_url, data = payload, headers = headers)
 		print r.content.decode('gb2312')
+		'''
+		print r.content.decode('gb2312')
 		print "[Sending Headers]: " + str(headers)
 		print "[StatusCode]: " + str(r.status_code)
 		print "[Receiving Headers]: " + str(r.headers)
-		self.cookies = r.cookies # 提取cookies
+		'''
 		# example <span id="xhxm">蔡嘉豪同学</span></em>
 		if_match = re.search('(<span id=\"xhxm\">)(.*)' + u'同学',r.content.decode('gb2312'))
 		if if_match:
 			print if_match.group(2)
 			self.name = if_match.group(2)
+		else:
+			print '登录失败'
 	
 	def query_grade(self):
 		# example http://jwgl.bistu.edu.cn/(cf2nnfrhv3dtqi55fsstlsap)/xscj_gc.aspx?xh=2014010919&xm=%B2%CC%BC%CE%BA%C0&gnmkdm=N121623
 		self.query_grade_url = self.base_url + self.special_code + "/xscj_gc.aspx?xh=" + self.id + "&xm=" + quote(self.name.encode('utf-8')) + "&gnmkdm=N121623"
 		headers = {
-			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36",
+			"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36",
 			"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-			"Referer":"http://jwgl.bistu.edu.cn/(cf2nnfrhv3dtqi55fsstlsap)/xs_main.aspx?xh=" + self.id
+			"Referer":"http://jwgl.bistu.edu.cn/" + self.special_code + "/xs_main.aspx?xh=" + self.id,
+			"Upgrade-Insecure-Requests": "1",
+			"Host": "jwgl.bistu.edu.cn",
 			}
 		r = self.session.get(self.query_grade_url,headers = headers)
 		print r.content.decode('gb2312')
+		if_match = re.search('(<span id=\"xhxm\">)(.*)' + u'同学',r.content.decode('gb2312'))
+		if if_match:
+			print if_match.group(2)
+			self.name = if_match.group(2)
+		else:
+			print '登录失败'
 	
 	def test(self):
 		pass
@@ -116,5 +130,5 @@ if __name__ == '__main__':
 	instance.get_pic()
 	#instance.getinfo()
 	instance.send_request()
-	#instance.query_grade()
+	instance.query_grade()
 	#instance.test()
