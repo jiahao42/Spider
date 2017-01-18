@@ -17,8 +17,8 @@ class Spider:
 		self.special_code = ""
 		self.view_state = ""
 		self.check_code = ""
-		self.id = "2014010919" # add your username here
-		self.password = "caijiahao5246"	# add your password here
+		self.id = "" # add your username here
+		self.password = ""	# add your password here
 		self.cookies = self.r.cookies
 		self.login_url = ""
 		self.query_grade_url = "" 
@@ -146,7 +146,7 @@ if __name__ == '__main__':
 	instance = Spider()
 	instance.get_url()
 	instance.get_pic()
-	#instance.getinfo()
+	instance.getinfo()
 	instance.send_request()
 	instance.query_grade()
 	#instance.test()

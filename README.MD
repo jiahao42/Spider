@@ -4,9 +4,7 @@
 
 A web spider for BISTU education system
 
-depends on lib requests from Python
-
-
+### Match the lessons and grades
 regex = (<td>(.*)</td>){3}<td>(.*)</td><td>(.*)</td><td>&nbsp;</td>(<td>(.*)</td>){6}<td>([0-9]*)</td>
 
 <td>2016-2017</td>
@@ -30,8 +28,6 @@ regex = (<td>(.*)</td>){3}<td>(.*)</td><td>(.*)</td><td>&nbsp;</td>(<td>(.*)</td
 <td>0</td>
 <td></td>
 
-
-.*
 1.学年
 2.学期
 3.课程代码
