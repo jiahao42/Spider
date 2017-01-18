@@ -126,6 +126,11 @@ class Spider:
 		}
 		r = self.session.post(self.query_grade_url, data = payload, headers = headers)
 		print r.content.decode('gb2312')
+		if_match = re.search(r'(<td>(.*)</td>){3}<td>(.*)</td><td>(.*)</td><td>&nbsp;</td>(<td>(.*)</td>){6}<td>([0-9]*)</td><td>0</td>', r.content.decode('gb2312'))
+		if if_match:
+			print "group3: " + if_match.group(3)#课程名称
+			print "group7: " + if_match.group(7)#成绩
+
 		
 		
 	def test(self):
