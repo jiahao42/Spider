@@ -22,6 +22,7 @@ class Spider:
 		self.cookies = self.r.cookies
 		self.login_url = ""
 		self.query_grade_url = "" 
+		self.query_grade_viewstate = ""
 		self.name = ""
 		self.session = requests.Session()
 
@@ -111,13 +112,22 @@ class Spider:
 			}
 		r = self.session.get(self.query_grade_url,headers = headers)
 		print r.content.decode('gb2312')
-		if_match = re.search('(<span id=\"xhxm\">)(.*)' + u'同学',r.content.decode('gb2312'))
+		if_match = re.search(r'((.*)VIEWSTATE" value=")(.*)(" />)', r.content.decode('gb2312'))
 		if if_match:
-			print if_match.group(2)
-			self.name = if_match.group(2)
+			print if_match.group(3)
+			self.query_grade_viewstate = if_match.group(3)
 		else:
-			print '登录失败'
-	
+			print 'Failed to get VIEWSTATE when querying grade'
+		payload = {
+			"__VIEWSTATE" : self.query_grade_viewstate,
+			"ddlXN" : "2016-2017",
+			"ddlXQ" : "1",
+			"Button1" : u'按学期查询'.encode('gb2312'),
+		}
+		r = self.session.post(self.query_grade_url, data = payload, headers = headers)
+		print r.content.decode('gb2312')
+		
+		
 	def test(self):
 		pass
 	def getinfo(self):
