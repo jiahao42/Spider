@@ -25,6 +25,8 @@ class Spider:
 		self.query_grade_viewstate = ""
 		self.name = ""
 		self.session = requests.Session()
+		self.lessons = []
+		self.grades = []
 
 	def get_url(self):
 		# example http://jwgl.bistu.edu.cn/(d5njjm552sqn0j45ijyef3jn)/default2.aspx
@@ -85,7 +87,7 @@ class Spider:
 			"Accept-Encoding": "gzip, deflate",}
 		# r = self.session.post(self.login_url, data=payload, headers=headers)
 		r = self.session.post(self.login_url, data = payload, headers = headers)
-		print r.content.decode('gb2312')
+		# print r.content.decode('gb2312')
 		'''
 		print r.content.decode('gb2312')
 		print "[Sending Headers]: " + str(headers)
@@ -111,10 +113,10 @@ class Spider:
 			"Host": "jwgl.bistu.edu.cn",
 			}
 		r = self.session.get(self.query_grade_url,headers = headers)
-		print r.content.decode('gb2312')
+		# print r.content.decode('gb2312')
 		if_match = re.search(r'((.*)VIEWSTATE" value=")(.*)(" />)', r.content.decode('gb2312'))
 		if if_match:
-			print if_match.group(3)
+			# print if_match.group(3)
 			self.query_grade_viewstate = if_match.group(3)
 		else:
 			print 'Failed to get VIEWSTATE when querying grade'
@@ -125,13 +127,14 @@ class Spider:
 			"Button1" : u'按学期查询'.encode('gb2312'),
 		}
 		r = self.session.post(self.query_grade_url, data = payload, headers = headers)
-		print r.content.decode('gb2312')
-		if_match = re.search(r'(<td>(.*)</td>){3}<td>(.*)</td><td>(.*)</td><td>&nbsp;</td>(<td>(.*)</td>){6}<td>([0-9]*)</td><td>0</td>', r.content.decode('gb2312'))
-		if if_match:
-			print "group3: " + if_match.group(3)#课程名称
-			print "group7: " + if_match.group(7)#成绩
-
-		
+		# print r.content.decode('gb2312')
+		if_match = re.findall(r'(<td>(.*)</td>){3}<td>(.*)</td><td>(.*)</td><td>&nbsp;</td>(<td>(.*)</td>){6}<td>([0-9]*)</td><td>0</td>', r.content.decode('gb2312'))
+		for i in if_match:
+			self.lessons.append(i[2])
+			self.grades.append(i[6])
+		for i in range(len(self.lessons)):
+			print self.lessons[i] + ": ",
+			print self.grades[i]
 		
 	def test(self):
 		pass
