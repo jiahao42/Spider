@@ -4,6 +4,10 @@
 
 A web spider for BISTU education system
 
+###Usage
+
+![](https://raw.githubusercontent.com/Jameeeees/Spider/master/screenshots/usage.jpg)
+
 ### Match the lessons and grades
 regex = (\<td\>(.\*)\</td\>){3}\<td\>(.\*)\</td\>\<td\>(.\*)\</td\>\<td\>&nbsp;\</td\>(\<td\>(.\*)\</td\>){6}\<td\>([0-9]\*)\</td\>
 
