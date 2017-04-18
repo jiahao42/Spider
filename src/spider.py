@@ -17,8 +17,8 @@ class Spider:
 		self.special_code = ""
 		self.view_state = ""
 		self.check_code = ""
-		self.id = "" # add your username here
-		self.password = ""	# add your password here
+		self.id = "2014010919" # add your username here
+		self.password = "caijiahao5246"	# add your password here
 		self.cookies = self.r.cookies
 		self.login_url = ""
 		self.query_grade_url = "" 
@@ -87,7 +87,7 @@ class Spider:
 			"Accept-Encoding": "gzip, deflate",}
 		# r = self.session.post(self.login_url, data=payload, headers=headers)
 		r = self.session.post(self.login_url, data = payload, headers = headers)
-		# print r.content.decode('gb2312')
+		print r.content.decode('gb2312')
 		'''
 		print r.content.decode('gb2312')
 		print "[Sending Headers]: " + str(headers)
@@ -146,7 +146,7 @@ if __name__ == '__main__':
 	instance = Spider()
 	instance.get_url()
 	instance.get_pic()
-	instance.getinfo()
+	#instance.getinfo()
 	instance.send_request()
 	instance.query_grade()
 	#instance.test()
