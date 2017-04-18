@@ -18,7 +18,7 @@ class Spider:
 		self.view_state = ""
 		self.check_code = ""
 		self.id = "2014010919" # add your username here
-		self.password = "caijiahao5246"	# add your password here
+		self.password = ""	# add your password here
 		self.cookies = self.r.cookies
 		self.login_url = ""
 		self.query_grade_url = "" 
