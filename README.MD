@@ -4,7 +4,7 @@
 
 A web spider for BISTU education system
 
-###Usage
+### Usage
 
 ![](https://raw.githubusercontent.com/Jameeeees/Spider/master/screenshots/usage.jpg)
 
