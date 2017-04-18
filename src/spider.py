@@ -4,6 +4,7 @@
 import requests
 import re
 import os
+from time import sleep
 from PIL import Image
 from io import StringIO
 from urllib import urlencode
@@ -17,7 +18,7 @@ class Spider:
 		self.special_code = ""
 		self.view_state = ""
 		self.check_code = ""
-		self.id = "2014010919" # add your username here
+		self.id = "" # add your username here
 		self.password = ""	# add your password here
 		self.cookies = self.r.cookies
 		self.login_url = ""
@@ -87,13 +88,11 @@ class Spider:
 			"Accept-Encoding": "gzip, deflate",}
 		# r = self.session.post(self.login_url, data=payload, headers=headers)
 		r = self.session.post(self.login_url, data = payload, headers = headers)
-		print r.content.decode('gb2312')
-		'''
+		# print r.content.decode('gb2312')
 		print r.content.decode('gb2312')
 		print "[Sending Headers]: " + str(headers)
 		print "[StatusCode]: " + str(r.status_code)
 		print "[Receiving Headers]: " + str(r.headers)
-		'''
 		# example <span id="xhxm">蔡嘉豪同学</span></em>
 		if_match = re.search('(<span id=\"xhxm\">)(.*)' + u'同学',r.content.decode('gb2312'))
 		if if_match:
@@ -146,7 +145,9 @@ if __name__ == '__main__':
 	instance = Spider()
 	instance.get_url()
 	instance.get_pic()
-	#instance.getinfo()
+	instance.getinfo()
+	# sleep(1)
 	instance.send_request()
 	instance.query_grade()
-	#instance.test()
+	# sleep(1)
+	# instance.test()
